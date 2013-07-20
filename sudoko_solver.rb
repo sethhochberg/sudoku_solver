@@ -115,21 +115,57 @@ class Sudoko
           end
         column += 1 
         print_board
-        sleep(0.04)            
+        #sleep(0.04)            
         end
       end    
     end
-    puts "The game is finished! It took this poor computer #{Time.now - start_time} to solve the puzzle. It slowed down for you to watch the magic..."  
+    puts "The game is finished! It took this poor computer #{(Time.now - start_time).round(2)} to solve the puzzle. It slowed down for you to watch the magic..."  
+    if validate_solution
+      "All rows, columns, and boxes sum to 45 - all numbers between 1 and 9 are present in each!"
+    else
+      "Its just wrong. Validations failed. At least one row, column, or box did not add up to 45. All 9 numbers were not present."  
   end
 
   def print_board
     print "\e[2J" #clear screen
     print "\e[H" #move to home
-    pp @rows_array
+    counter = 0
+    print "-------------------------\n"
+
+    @rows_array.each do |row_array|
+      print '| '
+      row_array.each_slice(3) do |subrow|
+        print subrow.join(' ')
+        print ' | '
+      end
+      print "\n"
+      if counter == 2 || counter == 5 || counter == 8
+        print "-------------------------\n"
+      end
+      counter += 1      
+    end
+  end
+
+  def validate_solution
+    @rows_array.each do |row|
+      return false if row.inject(0){|result, number| number.to_i + result } != 45
+    end
+
+    count = 0
+    while count < 9 
+      return false if get_column(count).inject(0){|result, number| number.to_i + result } != 45
+      return false if get_box(count).flatten.inject(0){|result, number| number.to_i + result } != 45
+      count += 1
+    end
+
+    return true  
   end
 end
 
-#game = Sudoko.new('003020600900305001001806400008102900700000008006708200002609500800203009005010300')
-#game.solve
-game2 = Sudoko.new('619030040270061008000047621486302079000014580031009060005720806320106057160400030')
-game2.solve
+game = Sudoko.new('003020600900305001001806400008102900700000008006708200002609500800203009005010300')
+game.solve
+sleep(3)
+#game2 = Sudoko.new('619030040270061008000047621486302079000014580031009060005720806320106057160400030')
+#game2.solve
+#game3 = Sudoko.new('105802000090076405200400819019007306762083090000061050007600030430020501600308900')
+#game3.solve
