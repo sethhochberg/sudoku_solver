@@ -115,15 +115,16 @@ class Sudoko
           end
         column += 1 
         print_board
-        #sleep(0.04)            
+        sleep(0.04)            
         end
       end    
     end
     puts "The game is finished! It took this poor computer #{(Time.now - start_time).round(2)} to solve the puzzle. It slowed down for you to watch the magic..."  
     if validate_solution
-      "All rows, columns, and boxes sum to 45 - all numbers between 1 and 9 are present in each!"
+      puts "All rows, columns, and boxes sum to 45 - all numbers between 1 and 9 are present in each!"
     else
-      "Its just wrong. Validations failed. At least one row, column, or box did not add up to 45. All 9 numbers were not present."  
+      puts "Its just wrong. Validations failed. At least one row, column, or box did not add up to 45. All 9 numbers were not present."  
+    end 
   end
 
   def print_board
